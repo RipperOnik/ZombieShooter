@@ -1,16 +1,21 @@
 
+import java.util.ArrayList;
+
 import processing.core.PImage;
 
 public class Bullet extends Sprite{
 	private float MOVESPEED = 5;
-	public Bullet(Program parent, PImage img, float scale, Player player) {
+	ArrayList<Sprite> enemies;
+	ArrayList<Sprite> bullets;
+	public Bullet(Program parent, PImage img, float scale, Player player, ArrayList<Sprite> enemies, ArrayList<Sprite> bullets) {
 		super(parent, img, scale);
 		this.degrees = player.degrees; // 0-360
 		this.centerX = player.centerX;
 		this.centerY = player.centerY;
+		this.enemies = enemies;
+		this.bullets = bullets;
 		calculateSpeed();
 	}
-	
 	
 	
 	
@@ -72,5 +77,12 @@ public class Bullet extends Sprite{
 		this.changeY = ySpeed;
 		
 	}
-
+//	public void checkEnemyCollision() {
+//		//check if hit an enemy
+//		ArrayList<Sprite> hitEnemies = checkCollisionList(enemies);
+//		for(Sprite hitEnemy: hitEnemies) {
+//			enemies.remove(hitEnemy);
+////			bullets.remove(this);
+//		}
+//	}
 }

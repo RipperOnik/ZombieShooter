@@ -80,6 +80,9 @@ public class Enemy extends Sprite{
 	public ArrayList<Sprite> checkCollisionList(ArrayList<Sprite> objects) {
 		ArrayList<Sprite> collisionList = new ArrayList<Sprite>();
 		for(Sprite obj: objects) {
+			if (obj.equals(this)) {
+				continue;
+			}
 			if (this.checkCollision(obj)) {
 				collisionList.add(obj);
 			}

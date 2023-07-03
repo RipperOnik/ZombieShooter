@@ -7,14 +7,16 @@ public class Player extends Sprite{
 	public float MOVESPEED = 5;
 	ArrayList<Sprite> objects;
 	ArrayList<Sprite> bullets;
+	ArrayList<Sprite> enemies;
 	PImage bulletImage;
 	
 	private boolean hasDied = false;
-	public Player(Program parent, PImage img, float scale, ArrayList<Sprite> objects, PImage bulletImage) {
+	public Player(Program parent, PImage img, float scale, ArrayList<Sprite> objects, PImage bulletImage, ArrayList<Sprite> enemies) {
 		super(parent, img, scale);
 		this.objects = objects;
 		this.bullets = new ArrayList<Sprite>();
 		this.bulletImage = bulletImage;
+		this.enemies = enemies;
 		
 	}
 	public void rotate(boolean clockwise) {
@@ -71,16 +73,23 @@ public class Player extends Sprite{
 		return hasDied;
 	}
 	public void shoot() {
-		Bullet bullet = new Bullet(parent, bulletImage, 30f/57f, this);
+		Bullet bullet = new Bullet(parent, bulletImage, 30f/57f, this, enemies, bullets);
 		bullets.add(bullet);
 	}
 	@Override
 	public void display() {
 		super.display();
+	}
+	public void displayBullets() {
 		for(Sprite bullet: bullets) {
-			bullet.move();
-			bullet.display();
+			((Bullet)bullet).move();
+			((Bullet)bullet).display();
 		}
 	}
+//	public void checkBulletCollision() {
+//		for(Sprite bullet: bullets) {
+//			((Bullet)bullet).checkEnemyCollision();
+//		}
+//	}
 
 }

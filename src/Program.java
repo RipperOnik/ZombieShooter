@@ -38,13 +38,12 @@ public class Program extends PApplet{
 		objects = new ArrayList<Sprite>();
 		enemies = new ArrayList<Sprite>();
 		
-		player = new Player(this, playerImage, 100f/128f, objects, bulletImage);
+		player = new Player(this, playerImage, 100f/128f, objects, bulletImage, enemies);
 		player.centerX = FULL_WIDTH/2;
 		player.centerY = FULL_HEIGHT/2;
 		
 		createObjects();
 		
-//		println(tan(radians(350)));
 		
 				
 	
@@ -54,12 +53,13 @@ public class Program extends PApplet{
 	public void draw() {
 		background(0, 255, 0);
 		scroll();
-		
-//		println(player.degrees);
-	
+		if (frameCount % 5 == 0) {			
+			checkBulletCollision();
+		}
 		
 		player.move();
 		player.display();
+		player.displayBullets();
 		
 		for(Sprite obj: objects) {
 			obj.display();
@@ -70,6 +70,18 @@ public class Program extends PApplet{
 			((Enemy)enemy).move();
 			((Enemy)enemy).display();
 		}		
+	}
+	void checkBulletCollision() {
+		for(int i = 0; i < player.bullets.size(); i++) {
+			for(int j = 0; j < enemies.size(); j++) {
+				
+				if (player.bullets.get(i).checkCollision(enemies.get(j))) {
+					player.bullets.remove(i);
+					enemies.remove(j);
+					return;
+				}
+			}
+		}
 	}
 	void scroll() {
 		float rightBoundary = viewX + width - RIGHT_MARGIN;
@@ -142,8 +154,7 @@ public class Program extends PApplet{
 		        objects.add(s);
 		      }
 		      else if(values[col].equals("2")){
-		    	  ArrayList<Sprite> allies = (ArrayList)enemies.clone();
-				  Enemy enemy = new Enemy(this, enemyImage, 100f/128f, player, allies);
+				  Enemy enemy = new Enemy(this, enemyImage, 100f/128f, player, enemies);
 				  enemy.centerX = SPRITE_SIZE/2 + col * SPRITE_SIZE;
 				  enemy.centerY = SPRITE_SIZE/2 + row * SPRITE_SIZE;
 				  enemies.add(enemy);
