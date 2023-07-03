@@ -3,26 +3,33 @@ import java.util.ArrayList;
 import processing.core.PImage;
 
 public class Player extends Sprite{
-	private float ROTATION_SPEED = 20;
+	private float ROTATION_SPEED = 10;
 	public float MOVESPEED = 5;
 	ArrayList<Sprite> objects;
+	ArrayList<Sprite> bullets;
+	PImage bulletImage;
 	
 	private boolean hasDied = false;
-	public Player(Program parent, PImage img, float scale, ArrayList<Sprite> objects) {
+	public Player(Program parent, PImage img, float scale, ArrayList<Sprite> objects, PImage bulletImage) {
 		super(parent, img, scale);
 		this.objects = objects;
+		this.bullets = new ArrayList<Sprite>();
+		this.bulletImage = bulletImage;
 		
 	}
 	public void rotate(boolean clockwise) {
+		// goes from 0 to 360
 		if (clockwise) {
 			degrees+=ROTATION_SPEED;
 		}else {
 			degrees-=ROTATION_SPEED;
 		}
-		if (degrees >= 360) {
+		
+		if (degrees < 0) {
+			degrees += 360;		
+		}
+		else if (degrees >= 360) {
 			degrees -= 360;
-		}else if (degrees <= -360) {
-			degrees += 360;
 		}
 	}
 	@Override
@@ -62,6 +69,18 @@ public class Player extends Sprite{
 	}
 	public boolean isDead() {
 		return hasDied;
+	}
+	public void shoot() {
+		Bullet bullet = new Bullet(parent, bulletImage, 30f/57f, this);
+		bullets.add(bullet);
+	}
+	@Override
+	public void display() {
+		super.display();
+		for(Sprite bullet: bullets) {
+			bullet.move();
+			bullet.display();
+		}
 	}
 
 }

@@ -32,7 +32,7 @@ public class Enemy extends Sprite{
 			ySpeed = MOVESPEED;
 			
 		}else {
-			float ySpeedToxSpeed = Program.abs(Program.tan(degrees));
+			float ySpeedToxSpeed = Program.abs(Program.tan(Program.radians(degrees)));
 			
 			xSpeed = 1; // x
 			ySpeed = ySpeedToxSpeed; // y = some_number * x
@@ -59,14 +59,48 @@ public class Enemy extends Sprite{
 		
 	}
 	@Override
+	public boolean checkCollision(Sprite obj) {
+		float padding = 5;
+		float rightBorder = getRight() + padding;
+		float leftBorder = getLeft() - padding;
+		float topBorder = getTop() - padding;
+		float bottomBorder = getBottom() + padding;
+		
+		boolean noXOverlap = rightBorder <= obj.getLeft() || leftBorder >= obj.getRight();
+		boolean noYOverlap = bottomBorder <= obj.getTop() || topBorder >= obj.getBottom();
+		if (noXOverlap || noYOverlap) {
+			return false;
+		}
+		// we have a collision when all 4 conditions are not met
+		else {
+			return true;
+		}
+	}
+	@Override
+	public ArrayList<Sprite> checkCollisionList(ArrayList<Sprite> objects) {
+		ArrayList<Sprite> collisionList = new ArrayList<Sprite>();
+		for(Sprite obj: objects) {
+			if (this.checkCollision(obj)) {
+				collisionList.add(obj);
+			}
+		}
+		return collisionList;
+	}
+	
+	@Override
 	public void move() {
 		if (parent.frameCount % 2 == 0) {
 			calculateSpeed();
+			
 			centerY += changeY;
-			centerX += changeX;
 			ArrayList<Sprite> collisionList = checkCollisionList(allies);
 			if (collisionList.size() > 0) {
 				centerY -= changeY;
+			}
+			
+			centerX += changeX;
+			collisionList = checkCollisionList(allies);
+			if (collisionList.size() > 0) {
 				centerX -= changeX;
 			}
 			

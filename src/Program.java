@@ -30,6 +30,7 @@ public class Program extends PApplet{
 	public void setup() {
 		imageMode(CENTER);
 		PImage playerImage = loadImage("player/player.png");
+		PImage bulletImage = loadImage("player/bullet.png");
 		redBrickImage = loadImage("red_brick.png");
 		enemyImage = loadImage("enemy/zombie_walk.png");
 		
@@ -37,11 +38,14 @@ public class Program extends PApplet{
 		objects = new ArrayList<Sprite>();
 		enemies = new ArrayList<Sprite>();
 		
-		player = new Player(this, playerImage, 100f/128f, objects);
+		player = new Player(this, playerImage, 100f/128f, objects, bulletImage);
 		player.centerX = FULL_WIDTH/2;
 		player.centerY = FULL_HEIGHT/2;
 		
 		createObjects();
+		
+//		println(tan(radians(350)));
+		
 				
 	
 		
@@ -51,7 +55,7 @@ public class Program extends PApplet{
 		background(0, 255, 0);
 		scroll();
 		
-//		println(player.isDead());
+//		println(player.degrees);
 	
 		
 		player.move();
@@ -93,31 +97,36 @@ public class Program extends PApplet{
 		}else if (keyCode == LEFT) {
 			player.rotate(false);
 		}
-		if (key == 'd') {
+		else if (keyCode == 32) {
+			player.shoot();
+		}   
+		else if (key == 'd') {
 			player.changeX = player.MOVESPEED;
 		}
-		if (key == 'a') {
+		else if (key == 'a') {
 			player.changeX = -player.MOVESPEED;
 		}
-		if (key == 's') {
+		else if (key == 's') {
 			player.changeY = player.MOVESPEED;
 		}
-		if (key == 'w') {
+		else if (key == 'w') {
 			player.changeY = -player.MOVESPEED;
 		}   
+
+		
 	}
 	@Override
 	public void keyReleased() {
 		if (key == 'd') {
 			player.changeX = 0;
 		}
-		if (key == 'a') {
+		else if (key == 'a') {
 			player.changeX = 0;
 		}
-		if (key == 's') {
+		else if (key == 's') {
 			player.changeY = 0;
 		}
-		if (key == 'w') {
+		else if (key == 'w') {
 			player.changeY = 0;
 		}  
 	}
