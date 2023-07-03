@@ -87,7 +87,7 @@ public class Program extends PApplet{
 	}
 	void displayScore() {
 		textSize(32);
-		fill(255,0,0);
+		fill(0,0,255);
 		text("Zombies: " + score + "/"+ maxScore, viewX + 50, viewY + 50);
 	}
 	void displayGameOver() {
