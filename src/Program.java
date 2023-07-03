@@ -11,8 +11,9 @@ public class Program extends PApplet{
 	final static float FULL_WIDTH = 1700f;
 	final static float FULL_HEIGHT= 1300f;
 	
-	float viewX = 0;
-	float viewY = 0;
+	float viewX, viewY;
+	int score, maxScore;
+	boolean won;
 		
 	Player player;
 	PImage enemyImage, redBrickImage;
@@ -28,6 +29,12 @@ public class Program extends PApplet{
 	}
 	@Override
 	public void setup() {
+		viewX = 0;
+		viewY = 0;
+		score = 0;
+		won = false;
+		
+		
 		imageMode(CENTER);
 		PImage playerImage = loadImage("player/player.png");
 		PImage bulletImage = loadImage("player/bullet.png");
@@ -44,32 +51,61 @@ public class Program extends PApplet{
 		
 		createObjects();
 		
+		maxScore = enemies.size();
 		
-				
-	
+		
 		
 	}
 	@Override
 	public void draw() {
-		background(0, 255, 0);
+		if (won || player.isDead()) {
+			displayGameOver();
+			
+		}else {
+			background(0, 255, 0);
+			scroll();
+			if (frameCount % 5 == 0) {			
+				checkBulletCollision();
+			}
+			
+			player.move();
+			player.display();
+			player.displayBullets();
+			
+			for(Sprite obj: objects) {
+				obj.display();
+			}
+			
+			for(Sprite enemy: enemies) {
+				((Enemy)enemy).rotate();
+				((Enemy)enemy).move();
+				((Enemy)enemy).display();
+			}	
+			displayScore();
+		}
+		
+	}
+	void displayScore() {
+		textSize(32);
+		fill(255,0,0);
+		text("Zombies: " + score + "/"+ maxScore, viewX + 50, viewY + 50);
+	}
+	void displayGameOver() {
+		fill(0,0,255);
 		scroll();
-		if (frameCount % 5 == 0) {			
-			checkBulletCollision();
+		float textX = viewX + width/2 - 100;
+		float textY = viewY + height/2;
+		text("GAME OVER", textX, textY);
+		if (player.isDead()) {
+			text("YOU LOSE", textX, textY + 50);
+		}else if(won) {
+			text("YOU WIN", textX, textY + 50);
+		}
+		text("PRESS SPACE TO RESTART", textX, textY + 100);
+		if (keyCode == 32) {
+			setup();
 		}
 		
-		player.move();
-		player.display();
-		player.displayBullets();
-		
-		for(Sprite obj: objects) {
-			obj.display();
-		}
-		
-		for(Sprite enemy: enemies) {
-			((Enemy)enemy).rotate();
-			((Enemy)enemy).move();
-			((Enemy)enemy).display();
-		}		
 	}
 	void checkBulletCollision() {
 		for(int i = 0; i < player.bullets.size(); i++) {
@@ -78,6 +114,10 @@ public class Program extends PApplet{
 				if (player.bullets.get(i).checkCollision(enemies.get(j))) {
 					player.bullets.remove(i);
 					enemies.remove(j);
+					score++;
+					if (enemies.size() == 0) {
+						won = true;
+					}
 					return;
 				}
 			}
@@ -123,7 +163,7 @@ public class Program extends PApplet{
 		}
 		else if (key == 'w') {
 			player.changeY = -player.MOVESPEED;
-		}   
+		}  
 
 		
 	}
