@@ -1,11 +1,30 @@
+import java.util.ArrayList;
+
 import processing.core.*;
 
 public class Program extends PApplet{
+	final static float SPRITE_SCALE = 50f/128f;
+	final static float SPRITE_SIZE = 50f;
+	final static float RIGHT_MARGIN = 200;
+	final static float LEFT_MARGIN = 200;
+	final static float VERTICAL_MARGIN = 200;
+	final static float FULL_WIDTH = 1700f;
+	final static float FULL_HEIGHT= 1300f;
+	
+	float viewX = 0;
+	float viewY = 0;
+	
+	float centeredX = 450f;
+	float centeredY = 350f;
+	
+	boolean inCenter;
 	
 	
 	Player player;
-	Enemy enemy;
-	PImage enemyImage;
+	PImage enemyImage, redBrickImage;
+	ArrayList<Sprite> objects;
+	ArrayList<Sprite> enemies;
+	
 	public static void main(String[] args) {
 		PApplet.main("Program");
 	}
@@ -17,31 +36,58 @@ public class Program extends PApplet{
 	public void setup() {
 		imageMode(CENTER);
 		PImage playerImage = loadImage("player/player.png");
+		redBrickImage = loadImage("red_brick.png");
 		enemyImage = loadImage("enemy/zombie_walk.png");
 		
+		inCenter = false;
+		
+		objects = new ArrayList<Sprite>();
+		enemies = new ArrayList<Sprite>();
+		
 		player = new Player(this, playerImage, 100f/128f);
-		player.centerX = width/2;
-		player.centerY = height/2;
+		player.centerX = FULL_WIDTH/2;
+		player.centerY = FULL_HEIGHT/2;
 		
-		enemy = new Enemy(this, enemyImage, 100f/128f, player);
-		enemy.centerX = -50;
-		enemy.centerY = -50;
-		
-		
+		createObjects();
+		translate(-viewX, -viewY);
 	}
 	@Override
 	public void draw() {
 		background(0, 255, 0);
+		scroll();
 	
 		
 		player.move();
 		player.display();
 		
-		enemy.rotate();
-		enemy.move();
-		enemy.display();
+		for(Sprite obj: objects) {
+			obj.display();
+		}
 		
-		
+		for(Sprite enemy: enemies) {
+			((Enemy)enemy).rotate();
+			((Enemy)enemy).move();
+			((Enemy)enemy).display();
+		}		
+	}
+	void scroll() {
+		float rightBoundary = viewX + width - RIGHT_MARGIN;
+		if (player.getRight() > rightBoundary) {
+			viewX += player.getRight() - rightBoundary;
+		}
+		float leftBoundary = viewX + LEFT_MARGIN;
+		if (player.getLeft() < leftBoundary) {
+			viewX -= leftBoundary - player.getLeft();
+		}
+		float bottomBoundary = viewY + height - VERTICAL_MARGIN;
+		if (player.getBottom() > bottomBoundary) {
+			viewY += player.getBottom() - bottomBoundary;
+		}
+		float topBoundary = viewY + VERTICAL_MARGIN;
+		if (player.getTop() < topBoundary) {
+			viewY -= topBoundary - player.getTop();
+		}
+		translate(-viewX, -viewY);
 	}
 	@Override
 	public void keyPressed() {
@@ -51,26 +97,53 @@ public class Program extends PApplet{
 			player.rotate(false);
 		}
 		if (key == 'd') {
-			player.changeX = 5;
-		}else if (key == 'a') {
-			player.changeX = -5;
-		}else if (key == 's') {
-			player.changeY = 5;
-		}else if (key == 'w') {
-			player.changeY = -5;
+			player.changeX = player.MOVESPEED;
+		}
+		if (key == 'a') {
+			player.changeX = -player.MOVESPEED;
+		}
+		if (key == 's') {
+			player.changeY = player.MOVESPEED;
+		}
+		if (key == 'w') {
+			player.changeY = -player.MOVESPEED;
 		}   
 	}
 	@Override
 	public void keyReleased() {
 		if (key == 'd') {
 			player.changeX = 0;
-		}else if (key == 'a') {
+		}
+		if (key == 'a') {
 			player.changeX = 0;
-		}else if (key == 's') {
+		}
+		if (key == 's') {
 			player.changeY = 0;
-		}else if (key == 'w') {
+		}
+		if (key == 'w') {
 			player.changeY = 0;
 		}  
+	}
+	void createObjects() {
+		 String[] lines = loadStrings("map.csv");
+		  for(int row = 0; row < lines.length; row++){
+		    String[] values = split(lines[row], ";");
+		    for(int col = 0; col < values.length; col++){
+		      if(values[col].equals("1")){
+		        Sprite s = new Sprite(this, redBrickImage, SPRITE_SCALE);
+		        s.centerX = SPRITE_SIZE/2 + col * SPRITE_SIZE;
+		        s.centerY = SPRITE_SIZE/2 + row * SPRITE_SIZE;
+		        objects.add(s);
+		      }
+		      else if(values[col].equals("2")){
+				  Enemy enemy = new Enemy(this, enemyImage, 100f/128f, player);
+				  enemy.centerX = SPRITE_SIZE/2 + col * SPRITE_SIZE;
+				  enemy.centerY = SPRITE_SIZE/2 + row * SPRITE_SIZE;
+				  enemies.add(enemy);
+		      }
+		    }
+		  }  
+		
 	}
 
 }

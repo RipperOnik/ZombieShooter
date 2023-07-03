@@ -7,7 +7,6 @@ public class Sprite {
 	float centerX, centerY;
 	float changeX, changeY;
 	float degrees; // from -360 to 360 
-//	private float ROTATION_SPEED = 10;
 	float w, h;
 	Program parent;
 	
@@ -58,8 +57,5 @@ public class Sprite {
 	public void setBottom(float newBottom) {
 		centerY = newBottom - h/2; 
 	}
-	
-	
-	
 
 }

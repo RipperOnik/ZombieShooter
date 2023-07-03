@@ -59,5 +59,17 @@ public class Enemy extends Sprite{
 		calculateSpeed();
 		super.move();
 	}
+	public boolean atackedPlayer() {
+		boolean noXOverlap = getRight() <= player.getLeft() || getLeft() >= player.getRight();
+		boolean noYOverlap = getBottom() <= player.getTop() || getTop() >= player.getBottom();
+		if (noXOverlap || noYOverlap) {
+			return false;
+		}
+		// we have a collision when all 4 conditions are not met
+		else {
+			return true;
+		}
+		
+	}
 
 }
