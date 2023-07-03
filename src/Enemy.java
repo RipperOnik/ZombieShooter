@@ -1,11 +1,15 @@
+import java.util.ArrayList;
+
 import processing.core.PImage;
 
 public class Enemy extends Sprite{
-	private float MOVESPEED = 1;
+	private float MOVESPEED = 2;
 	Player player;
-	public Enemy(Program parent, PImage img, float scale, Player player) {
+	ArrayList<Sprite> allies;
+	public Enemy(Program parent, PImage img, float scale, Player player, ArrayList<Sprite> allies) {
 		super(parent, img, scale);
 		this.player = player;
+		this.allies = allies;
 	}
 	
 	// rotate enemy towards player
@@ -56,20 +60,21 @@ public class Enemy extends Sprite{
 	}
 	@Override
 	public void move() {
-		calculateSpeed();
-		super.move();
-	}
-	public boolean atackedPlayer() {
-		boolean noXOverlap = getRight() <= player.getLeft() || getLeft() >= player.getRight();
-		boolean noYOverlap = getBottom() <= player.getTop() || getTop() >= player.getBottom();
-		if (noXOverlap || noYOverlap) {
-			return false;
-		}
-		// we have a collision when all 4 conditions are not met
-		else {
-			return true;
+		if (parent.frameCount % 2 == 0) {
+			calculateSpeed();
+			centerY += changeY;
+			centerX += changeX;
+			ArrayList<Sprite> collisionList = checkCollisionList(allies);
+			if (collisionList.size() > 0) {
+				centerY -= changeY;
+				centerX -= changeX;
+			}
+			
+			if (checkCollision(player)) {
+				player.die();
+			}
+			
 		}
 		
 	}
-
 }

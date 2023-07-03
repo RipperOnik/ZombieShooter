@@ -13,13 +13,7 @@ public class Program extends PApplet{
 	
 	float viewX = 0;
 	float viewY = 0;
-	
-	float centeredX = 450f;
-	float centeredY = 350f;
-	
-	boolean inCenter;
-	
-	
+		
 	Player player;
 	PImage enemyImage, redBrickImage;
 	ArrayList<Sprite> objects;
@@ -39,22 +33,25 @@ public class Program extends PApplet{
 		redBrickImage = loadImage("red_brick.png");
 		enemyImage = loadImage("enemy/zombie_walk.png");
 		
-		inCenter = false;
 		
 		objects = new ArrayList<Sprite>();
 		enemies = new ArrayList<Sprite>();
 		
-		player = new Player(this, playerImage, 100f/128f);
+		player = new Player(this, playerImage, 100f/128f, objects);
 		player.centerX = FULL_WIDTH/2;
 		player.centerY = FULL_HEIGHT/2;
 		
 		createObjects();
-		translate(-viewX, -viewY);
+				
+	
+		
 	}
 	@Override
 	public void draw() {
 		background(0, 255, 0);
 		scroll();
+		
+//		println(player.isDead());
 	
 		
 		player.move();
@@ -136,7 +133,8 @@ public class Program extends PApplet{
 		        objects.add(s);
 		      }
 		      else if(values[col].equals("2")){
-				  Enemy enemy = new Enemy(this, enemyImage, 100f/128f, player);
+		    	  ArrayList<Sprite> allies = (ArrayList)enemies.clone();
+				  Enemy enemy = new Enemy(this, enemyImage, 100f/128f, player, allies);
 				  enemy.centerX = SPRITE_SIZE/2 + col * SPRITE_SIZE;
 				  enemy.centerY = SPRITE_SIZE/2 + row * SPRITE_SIZE;
 				  enemies.add(enemy);
