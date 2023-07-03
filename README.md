@@ -1,5 +1,5 @@
 # ZombieShooter
-Download the game [here](https://github.com/RipperOnik/ZombieShooter/releases/tag/v1.0.0)
+Download the game [here](https://github.com/RipperOnik/ZombieShooter/releases)
 ## Controls
 - WASD - for moving
 - LEFT and RIGHT Arrow keys - for aiming/turning 
