@@ -6,10 +6,7 @@ Download the game [here](https://github.com/RipperOnik/ZombieShooter/releases)
 - SPACE - for shooting
 
 ## Win condition
-Kill all zombies
-
-## Lose condition
-Get close to a zombie
+Kill all zombies and don't get grabbed by them
 
 ## Screenshots
 <img width="790" alt="Screenshot 2023-07-03 at 19 30 06" src="https://github.com/RipperOnik/ZombieShooter/assets/55228345/a1f44e08-ca39-447b-aad6-b3bc89f9d2e4">
