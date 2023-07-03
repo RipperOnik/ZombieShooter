@@ -24,10 +24,8 @@ public class Program extends PApplet{
 		player.centerY = height/2;
 		
 		enemy = new Enemy(this, enemyImage, 100f/128f, player);
-		enemy.centerX = 100;
-		enemy.centerY = 100;
-		
-		
+		enemy.centerX = -50;
+		enemy.centerY = -50;
 		
 		
 	}
@@ -39,8 +37,8 @@ public class Program extends PApplet{
 		player.move();
 		player.display();
 		
-		enemy.move();
 		enemy.rotate();
+		enemy.move();
 		enemy.display();
 		
 		

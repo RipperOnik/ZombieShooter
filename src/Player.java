@@ -1,7 +1,7 @@
 import processing.core.PImage;
 
 public class Player extends Sprite{
-	private float ROTATION_SPEED = 10;
+	private float ROTATION_SPEED = 20;
 	public Player(Program parent, PImage img, float scale) {
 		super(parent, img, scale);
 		

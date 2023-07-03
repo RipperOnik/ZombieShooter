@@ -32,28 +32,7 @@ public class Sprite {
 	public void move() {
 		centerX += changeX;
 		centerY += changeY;
-	}
-//	public void rotate(boolean clockwise) {
-//		if (clockwise) {
-//			degrees+=ROTATION_SPEED;
-//		}else {
-//			degrees-=ROTATION_SPEED;
-//		}
-//		if (degrees >= 360) {
-//			degrees -= 360;
-//		}else if (degrees <= -360) {
-//			degrees += 360;
-//		}
-//	}
-//	public void rotate(float angle) {
-//		degrees = angle;
-//		if (degrees >= 360) {
-//			degrees -= 360;
-//		}else if (degrees <= -360) {
-//			degrees += 360;
-//		}
-//	}
-	
+	}	
 	
 	public float getLeft() {
 		return centerX - w/2;
